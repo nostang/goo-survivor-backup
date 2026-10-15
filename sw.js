@@ -9,7 +9,7 @@ async function retrieve(file){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
   try {
     // Hosting may add markup to HTML. All executable code and art use exact integrity hashes.
-    const response=await fetch(address(file.path),{cache:'reload',redirect:'error',signal:controller.signal,...(file.path==='index.html'?{}:{integrity:file.integrity})});
+    const response=await fetch(file.path==='index.html'?ROOT.href:address(file.path),{cache:'reload',redirect:'error',signal:controller.signal,...(file.path==='index.html'?{}:{integrity:file.integrity})});
     if(!response.ok)throw Error('Unavailable '+file.path);
     if(file.path==='index.html'&&!(await response.clone().text()).includes('data-goo-build="'+BUNDLE.version+'"'))throw Error('Unexpected document');
     return response;
