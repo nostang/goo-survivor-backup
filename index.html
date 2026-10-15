@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-Hant" data-goo-build="v1.3.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=yes" />
+    <meta name="theme-color" content="#102a2a" />
+    <meta name="description" content="Goo！鵝命求生——原創 Web 割草生存遊戲。" />
+    <title>Goo！鵝命求生</title>
+
+
+  </head>
+  <body>
+    <style>
+      #boot-screen{position:fixed;inset:0;z-index:9999;background:#102923;color:#fff3dc;display:grid;place-items:center;padding:20px;font-family:system-ui,sans-serif}#boot-screen[hidden]{display:none}.boot-card{max-width:440px;border:2px solid #789780;padding:24px;background:#1b3b30;line-height:1.7}.boot-card h1{font-size:26px}.boot-card button,.boot-card a{display:inline-block;padding:12px 16px;margin:6px 8px 0 0;background:#c1d98e;color:#172c23;border:0;font:inherit;text-decoration:none;cursor:pointer}.boot-note{font-size:13px;color:#c3d0c5}
+    </style>
+    <section id="boot-screen" role="status" aria-live="polite"><div class="boot-card"><h1>鵝命求生</h1><p id="boot-message">正在準備遊戲，請稍候…</p><div id="boot-recovery" hidden><button onclick="location.reload()">重新載入</button><a data-alternate href="https://nostang.github.io/goo-survivor-backup/">開啟備援網站</a><p class="boot-note">主站和備援的進度各自保存在目前瀏覽器，並不會自動同步。</p></div><noscript>請開啟瀏覽器的 JavaScript 才能遊玩。</noscript></div></section>
+    <script>
+      window.gooBootFailure=function(){document.querySelector('#boot-message').textContent='連線較慢或檔案未載入完整，請重新載入，或試試備援網站。';document.querySelector('#boot-recovery').hidden=false;};
+      window.gooBootWatchdog=setTimeout(window.gooBootFailure,45000);
+      addEventListener('DOMContentLoaded',function(){if(location.hostname==='nostang.github.io')document.querySelectorAll('[data-alternate]').forEach(function(a){a.href='https://goo-survivor.vul31969427.chatgpt.site/';a.textContent='開啟主網站';});});
+    </script>
+    <main id="app" inert>
+      <canvas id="game" aria-label="Goo 鵝命求生遊戲畫面"></canvas>
+
+      <section id="menu" class="screen visible">
+        <div class="menu-card">
+          <header class="menu-header">
+            <div class="brand-mark" aria-hidden="true"><img class="goo-logo" src="assets/goo-idle.png?v=1" alt="" /></div>
+            <div class="brand-copy"><p class="eyebrow">GOO SURVIVOR</p><h1>鵝命求生</h1><p class="tagline">嘎出一條生路。</p></div>
+            <div class="record-row"><span>最佳紀錄</span><strong id="best-time">00:00</strong></div>
+            <button id="settings-btn" class="menu-settings" aria-label="開啟設定" title="設定">
+              <img src="assets/ui/settings-pixel.svg" alt="" />
+            </button>
+          </header>
+          <div class="chapter-select" aria-label="目前開放關卡">
+            <div class="chapter-preview">
+              <div class="chapter-scene" aria-hidden="true">
+                <img id="chapter-art" src="assets/chapters/monday-commute-v1.jpg" alt="" />
+                <span id="chapter-lock" class="chapter-lock hidden"><img src="assets/ui/lock-pixel.svg" alt="" /></span>
+              </div>
+              <div class="chapter-preview-copy">
+                <div class="chapter-title-row"><strong id="chapter-title">逃出通勤地獄</strong><span id="chapter-stamp" class="chapter-stamp hidden">已通關</span></div>
+                <small id="chapter-description">穿過台北街區，準時趕到公司打卡。</small>
+              </div>
+              <button id="chapter-info-btn" class="chapter-info-btn" type="button" aria-label="查看本關攻略"><img src="assets/ui/info.svg" alt="" /></button>
+            </div>
+            <button id="chapter-chest" class="chapter-reward-button" type="button" disabled>
+              <img id="chest-art" src="assets/ui/chest-pixel-v3.svg" alt="" /><span id="chest-status" aria-hidden="true"></span>
+            </button>
+            <div class="week-progress" aria-label="選擇星期">
+              <button type="button" class="current" data-chapter="0">一</button>
+              <button type="button" data-chapter="1">二</button>
+              <button type="button" data-chapter="2">三</button>
+              <button type="button" data-chapter="3">四</button>
+              <button type="button" data-chapter="4">五</button>
+              <button type="button" data-chapter="5">六</button>
+              <button type="button" data-chapter="6">日</button>
+            </div>
+            <div id="week-badge" class="week-badge hidden"><img src="assets/ui/week-badge-v1.svg" alt="金色鵝頭一週目徽章" /><div><strong>一週目完成</strong><small>七日生還 · 嘎出一條生路</small></div></div>
+          </div>
+          <div class="menu-actions">
+            <button id="start-btn" class="primary-btn">開始遊戲 <span>→</span></button>
+            <button id="skills-btn" class="secondary-btn">技能圖鑑</button>
+            <button id="bestiary-btn" class="secondary-btn">怪物圖鑑 <span>15</span></button>
+          </div>
+          <p class="controls-copy">電腦：WASD／方向鍵　·　手機：任意位置拖曳＋自動省電</p>
+          <button id="build-version" class="build-version" aria-label="查看版本與更新紀錄"></button>
+        </div>
+      </section>
+
+      <section id="hud" class="hud hidden" aria-live="polite">
+        <div class="hud-top">
+          <div class="stat-pill timer"><span>存活</span><strong id="timer">00:00</strong></div>
+          <div class="stage-title"><b id="stage-name">台北・星期一</b> <span id="difficulty-label">標準</span></div>
+          <div class="hud-actions">
+            <button id="combo-btn" class="icon-btn combo-btn" aria-label="背包：查看目前裝備"><img src="assets/ui/backpack-v2.svg" alt="" /><span>背包</span></button>
+            <button id="pause-btn" class="icon-btn" aria-label="暫停"><img src="assets/ui/pause.svg" alt="" /></button>
+          </div>
+        </div>
+        <div class="bars">
+          <div class="bar health"><i id="health-bar"></i><span id="health-text">100 / 100</span></div>
+          <div class="bar xp"><i id="xp-bar"></i><span id="level-text">LV. 1</span></div>
+        </div>
+        <div id="route-status" class="route-status"></div>
+        <p id="lesson" class="lesson hidden" aria-live="polite"></p>
+        <button id="honk-btn" class="honk-btn" aria-label="主動嘎叫"><i id="honk-fill"></i><strong>嘎！</strong><small id="honk-cooldown">準備好了</small></button>
+        <div id="weapon-dock" class="weapon-dock"></div>
+        <div id="boss-wrap" class="boss-wrap hidden">
+          <strong id="boss-name">農場霸主</strong>
+          <small id="boss-phase" class="boss-phase"></small>
+          <div class="boss-bar"><i id="boss-bar"></i></div>
+        </div>
+      </section>
+
+      <section id="chapter-intro" class="modal hidden" aria-modal="true" role="dialog">
+        <div class="modal-card chapter-card">
+          <p id="intro-kicker" class="eyebrow">CHAPTER 01 · MONDAY</p>
+          <div class="chapter-goo"><img src="assets/goo-idle.png?v=1" alt="Goo" /></div>
+          <h2 id="intro-title">星期一，逃出通勤地獄</h2>
+          <p id="intro-story">住在台北的社畜 Goo 今天又睡過頭了！為了準時打卡，只好衝進混亂的通勤鼠潮。撐過這個星期一，晚上還要去打羽球呢！</p>
+          <div class="chapter-objective"><span>今日任務</span><strong id="intro-objective">在鼠潮中存活，擊敗勞鼠王！&#10;首領將於 5 分鐘後登場，擊敗即可通關</strong></div>
+          <button id="chapter-start" class="primary-btn">出發！</button>
+          <button id="chapter-back" class="secondary-btn">← 返回選關</button>
+        </div>
+      </section>
+
+      <aside id="training-panel" class="training-panel hidden" aria-label="新手教學">
+        <div class="training-card">
+          <p id="training-progress" class="eyebrow"></p>
+          <h2 id="training-title"></h2>
+          <p id="training-copy" aria-live="polite"></p>
+          <p id="training-meter" class="hidden"></p>
+          <div class="training-actions"><button id="training-practice" class="primary-btn">開始練習</button><button id="training-skip" class="secondary-btn">略過教學</button></div>
+        </div>
+      </aside>
+      <section id="chapter-info" class="modal hidden" aria-modal="true" role="dialog">
+        <div class="modal-card chapter-info-panel">
+          <p class="eyebrow">CHAPTER GUIDE</p>
+          <h2 id="chapter-info-title">星期一攻略</h2>
+          <div class="guide-grid">
+            <article><span>地圖</span><strong id="chapter-info-map">台北街區・全地圖</strong><p id="chapter-info-feature"></p></article>
+            <article><span>敵群</span><strong id="chapter-info-enemies">勞鼠族、八哥族、公雞族</strong><p>一般怪依階段隨機出沒；精英與首領依下方時間登場。</p></article>
+            <article class="boss-guide"><span>打王注意</span><strong id="chapter-info-boss">勞鼠王</strong><p id="chapter-info-tip"></p></article>
+          </div>
+          <details class="schedule-guide" open><summary>本關出沒時間表</summary><p>一般出怪階段與突發怪潮分開計算；首領登場後停止一般出怪。</p><ol id="chapter-timeline" class="chapter-timeline"></ol></details>
+          <button id="chapter-info-close" class="primary-btn">知道了</button>
+        </div>
+      </section>
+
+      <section id="upgrade" class="modal hidden" aria-modal="true" role="dialog">
+        <div class="modal-card upgrade-card">
+          <p class="eyebrow">LEVEL UP</p>
+          <h2 id="upgrade-title">Goo 變強了！</h2>
+          <p id="upgrade-hint">選擇一項能力</p>
+          <div id="upgrade-options" class="upgrade-options"></div>
+          <button id="reroll-btn" class="secondary-btn icon-label-btn"><img src="assets/ui/refresh.svg" alt="" />刷新選項 <span id="reroll-count">3</span></button>
+        </div>
+      </section>
+
+      <section id="evolution" class="modal hidden" aria-modal="true" role="dialog">
+        <div class="modal-card evolution-card">
+          <div class="evo-rays"></div>
+          <p class="eyebrow">EVOLUTION!</p>
+          <div id="evolution-icon" class="evolution-icon"><img src="assets/skills-v4/evolutions-feather.svg" alt="" /></div>
+          <h2 id="evolution-name">暴走長頸鵝</h2>
+          <p id="evolution-description">武器 LV.5 搭配對應能力 LV.1，即可進化。</p>
+          <button id="evolution-continue" class="primary-btn">嘎！繼續戰鬥</button>
+        </div>
+      </section>
+
+      <section id="combo-book" class="modal hidden" aria-modal="true" role="dialog">
+        <div class="modal-card combo-card">
+          <p class="eyebrow">GOO'S BAG</p>
+          <h2>Goo 的背包</h2>
+          <p class="combo-intro">本局裝備一覽。組合技配方會收錄在首頁圖鑑。</p>
+          <div class="loadout-section"><header><strong>攻擊武器</strong><span id="weapon-slot-count">1 / 5</span></header><div id="loadout-weapons" class="loadout-grid"></div></div>
+          <div class="loadout-section"><header><strong>能力</strong><span id="passive-slot-count">0 / 5</span></header><div id="loadout-passives" class="loadout-grid"></div></div>
+          <button id="combo-close" class="primary-btn">知道了，繼續嘎</button>
+        </div>
+      </section>
+
+      <section id="bestiary" class="modal hidden" aria-modal="true" role="dialog">
+        <div class="modal-card bestiary-panel">
+          <p class="eyebrow">TAIPEI MONSTER ARCHIVE · 15</p>
+          <h2>台北怪物圖鑑</h2>
+          <p class="bestiary-intro">五大家族，各有三種體型。展開卡片查看出沒時間；一般怪為隨機出現，精英與首領為定時登場。高階造型以精英身分出現時，不使用首領專屬連招。</p>
+          <div id="bestiary-list" class="bestiary-list"></div>
+          <button id="bestiary-close" class="primary-btn">看完了，回首頁</button>
+        </div>
+      </section>
+
+      <section id="skills" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="skills-title">
+        <div class="modal-card skill-panel">
+          <p class="eyebrow">SKILLS</p><h2 id="skills-title">技能圖鑑</h2>
+          <p class="skill-rules">武器、能力各最多 5 種，每種最高 LV.5。升級三選一，優先保留既有裝備成長；武器 LV.3 起，能力欄有空位時會提供缺少的進化搭配。</p>
+          <div class="skill-tabs" aria-label="技能分類">
+            <button id="skills-weapons" aria-pressed="true">武器</button>
+            <button id="skills-passives" aria-pressed="false">能力</button>
+            <button id="skills-evolutions" aria-pressed="false">進化</button>
+          </div>
+          <div id="skills-list" class="skills-list"></div>
+          <button id="skills-close" class="primary-btn">返回首頁</button>
+        </div>
+      </section>
+      <section id="chapter-loot" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="loot-title">
+        <div class="modal-card compact-card">
+          <p class="eyebrow">UNLOCKED</p><h2 id="loot-title">已解鎖</h2>
+          <div id="loot-items" class="loot-items"></div>
+          <button id="loot-close" class="primary-btn">收下</button>
+        </div>
+      </section>
+      <section id="pause" class="modal hidden" aria-modal="true" role="dialog">
+        <div class="modal-card compact-card">
+          <p class="eyebrow">PAUSED</p>
+          <h2>喘口鵝氣</h2>
+          <button id="resume-btn" class="primary-btn">繼續</button>
+          <button id="pause-settings-btn" class="secondary-btn">設定</button>
+          <button id="quit-btn" class="secondary-btn">返回首頁</button>
+        </div>
+      </section>
+
+      <section id="settings" class="modal hidden" aria-modal="true" role="dialog" aria-labelledby="settings-title">
+        <div class="modal-card settings-card">
+          <p class="eyebrow">SETTINGS</p><h2 id="settings-title">設定</h2>
+          <p id="settings-version" class="settings-version"></p>
+          <details class="release-notes"><summary>更新紀錄</summary><div id="release-notes"></div></details>
+          <label class="setting-row" for="setting-music">音樂 <output id="value-music">30%</output><input id="setting-music" type="range" min="0" max="100" value="30" /></label>
+          <label class="setting-row" for="setting-sfx">音效 <output id="value-sfx">65%</output><input id="setting-sfx" type="range" min="0" max="100" value="65" /></label>
+          <div class="setting-row">畫面晃動<button id="setting-shake" aria-label="畫面晃動" aria-pressed="true">開啟</button></div>
+          <div class="setting-row">觸覺回饋<button id="setting-haptics" aria-label="觸覺回饋" aria-pressed="false">關閉</button></div>
+          <div class="setting-row">特效強度<button id="setting-effects" aria-label="特效強度">標準</button></div>
+          <p id="offline-status" class="offline-status" aria-live="polite">離線檔案準備中…</p>
+          <p class="offline-status"><a data-alternate href="https://nostang.github.io/goo-survivor-backup/">備援網站</a> · 網址間的進度不會自動同步。</p>
+          <div class="setting-row">第一關新手教學<button id="training-replay">重新練習</button></div>
+          <div class="setting-row">操作提示<button id="setting-tutorial" aria-label="操作提示" aria-pressed="true">開啟</button></div>
+          <p class="settings-note">手機自動省電。觸覺回饋依裝置支援；危險預告在精簡模式也會保留。</p>
+          <button id="settings-close" class="primary-btn">完成</button>
+        </div>
+      </section>
+      <section id="result" class="modal hidden" aria-modal="true" role="dialog" aria-labelledby="result-title" aria-describedby="result-story">
+        <div class="modal-card result-card">
+          <div class="result-heading">
+            <div><p id="result-eyebrow" class="eyebrow">RUN OVER</p><h2 id="result-title">鵝生到此為止</h2><p id="result-ending-note" class="result-ending-note hidden">但沒有二周目，謝謝</p></div>
+          </div>
+          <div class="result-goose" id="result-goose"><img src="assets/goo-winner-v1.png" alt="Goo" /></div>
+          <p id="result-story" class="result-story"></p>
+          <div id="result-week-badge" class="week-badge hidden"><img src="assets/ui/week-badge-v1.svg" alt="金色鵝頭一週目徽章" /><div><strong>一週目完成徽章</strong><small>已收藏於首頁 · 七天辛苦了，Goo！</small></div></div>
+          <button id="result-unlock" class="result-unlock hidden" type="button"></button>
+          <div class="result-stats">
+            <div><span>時間</span><strong id="result-time">00:00</strong></div>
+            <div><span>擊倒</span><strong id="result-kills">0</strong></div>
+          </div>
+          <section class="result-records" aria-label="本局紀錄">
+            <div class="result-meta"><span>等級 <strong id="result-level">1</strong></span><span>進化 <strong id="result-evolutions">0</strong></span><span id="result-style"></span></div>
+            <ul id="result-build" class="result-build" aria-label="本局武器與進化"></ul>
+            <p id="result-passives" class="result-passives"></p>
+            <p id="result-advice" class="result-advice"></p>
+          </section>
+          <p id="result-next-note" class="result-next-note hidden"></p>
+          <div class="result-actions">
+            <button id="home-btn" class="primary-btn">回到首頁</button>
+            <button id="retry-btn" class="result-retry">再來一局</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="joystick" class="joystick hidden" aria-hidden="true"><i></i></div>
+      <div id="toast" class="toast"></div>
+    </main>
+    <script src="boot.js?v=1.3.0" onerror="gooBootFailure()"></script>
+  </body>
+</html>

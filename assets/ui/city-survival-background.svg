@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" shape-rendering="crispEdges">
+<defs><pattern id="brick" width="32" height="24" patternUnits="userSpaceOnUse"><path d="M0 0h32M0 12h32M16 0v12M0 12v12" stroke="#2a463a" stroke-width="2"/></pattern><pattern id="windows" width="28" height="32" patternUnits="userSpaceOnUse"><path fill="#496046" d="M8 8h8v12H8z"/><path fill="#263d32" d="M8 13h8v2H8z"/></pattern><g id="foot" fill="#6c8060"><path d="M6 0h3v5h3V2h3v7h-3v3H3V9H0V2h3v3h3z"/><path d="M6 12h3v6H6z"/></g><g id="feather" fill="#627b62"><path d="M16 0h8v8h-4v8h-4v4h-4v4H4v-8h4V8h4V4h4z"/><path d="M0 24h8v4H0z"/></g></defs>
+<!-- Quiet skyline frames a clear central reading area. -->
+<path fill="#1e382e" d="M0 0h160v112h-24v130H0zM788 0h172v276H836V112h-48zM0 726h102v-44h54v278H0zM808 784h58v-78h94v254H808z"/>
+<path fill="url(#brick)" d="M0 0h120v242H0zM846 0h114v276H846zM0 756h102v204H0zM866 732h94v228H866z"/>
+<path fill="#294638" d="M0 72h140v8H0zM0 154h140v8H0zM826 112h134v8H826zM830 224h130v8H830zM0 810h122v8H0zM844 866h116v8H844z"/>
+<path fill="url(#windows)" d="M18 20h94v124H18zM860 20h84v190h-84zM12 772h74v174H12zM878 764h66v178h-66z"/>
+<!-- Small awnings, rooftop water tanks and potted plants. -->
+<path fill="#334f3b" d="M0 222h152v12H0zM820 258h140v12H820zM18 712h44v40H18zM14 708h52v8H14zM900 680h36v44h-36zM896 676h44v8h-44z"/>
+<path fill="#566247" d="M6 222h12v12H6zM30 222h12v12H30zM54 222h12v12H54zM78 222h12v12H78zM102 222h12v12h-12zM126 222h12v12h-12zM828 258h12v12h-12zM852 258h12v12h-12zM876 258h12v12h-12zM900 258h12v12h-12zM924 258h12v12h-12z"/>
+<path fill="#314d39" d="M44 320h12v30H44zM30 308h40v20H30zM36 298h28v38H36zM888 530h12v30h-12zM874 518h40v20h-40zM880 508h28v38h-28z"/>
+<path fill="#5d5e43" d="M38 348h24v18H38zM882 558h24v18h-24z"/>
+<!-- Crosswalk fragments and a trail left by a goose on the run. -->
+<path fill="#314a3b" d="M0 452h54v10H0zM0 476h54v10H0zM0 500h54v10H0zM0 524h54v10H0zM904 360h56v10h-56zM904 384h56v10h-56zM904 408h56v10h-56z"/>
+<g opacity=".65"><use href="#foot" x="94" y="572"/><use href="#foot" x="118" y="530" transform="rotate(12 118 530)"/><use href="#foot" x="104" y="488"/><use href="#foot" x="838" y="448" transform="rotate(170 846 457)"/><use href="#foot" x="814" y="490" transform="rotate(160 822 499)"/><use href="#foot" x="836" y="534" transform="rotate(170 844 543)"/></g>
+<use href="#feather" x="164" y="80"/><use href="#feather" x="752" y="676" transform="rotate(70 768 692)"/><use href="#feather" x="92" y="870"/>
+<!-- Tiny scattered experience crystals, kept away from the main artwork. -->
+<path fill="#596747" d="M68 414h6v6h-6zM168 780h6v6h-6zM810 314h6v6h-6zM870 634h6v6h-6z"/>
+</svg>

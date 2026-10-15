@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" shape-rendering="crispEdges">
+  <path fill="#ff8a42" d="M4 17h8v4H4zm3-7h4v7H7zm5 10h7v3h-7zm43 4h6v4h-6zM52 12h4v12h-4z" opacity=".8"/>
+  <path fill="#1b2b29" d="M11 49h44v5H11z" opacity=".4"/>
+  <path fill="#1b2b29" d="M16 34h31v4h5v14h-5v4H17v-3h-5V40h4z"/>
+  <path fill="#fff5df" d="M18 36h27v3h5v11h-5v4H19v-3h-5v-9h4z"/>
+  <path fill="#f0d9bd" d="M18 47h27v5H20v-2h-2z"/>
+  <path fill="#1b2b29" d="M34 18h6v18h-6zm3-7h14v11H37z"/>
+  <path fill="#fff5df" d="M36 18h6v18h-6zm3-5h10v7H39z"/>
+  <path fill="#1b2b29" d="M44 15h5v2h-5zm-2-4h8v2h-8z"/>
+  <path fill="#f0a23a" d="M49 17h10v4H49zM21 54h7v5h-9v-2h2zm16 0h7v5h-9v-2h2z"/>
+  <path fill="#ff7254" d="M37 10h14v3H37z"/>
+  <path fill="#1b2b29" d="M7 34h4v18H7zm3-4h4v7h-4z"/>
+  <path fill="#9ce7d0" d="M3 23h14v14H3zm2 2v10h10V25z" fill-rule="evenodd"/>
+  <path fill="#c8f568" d="M6 26h8v8H6z" opacity=".45"/>
+</svg>
